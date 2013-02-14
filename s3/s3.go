@@ -130,10 +130,8 @@ func (b *Bucket) Get(path string) (data []byte, err error) {
 	return data, err
 }
 
-// GetReader retrieves an object from an S3 bucket.
-// It is the caller's responsibility to call Close on rc when
-// finished reading.
-func (b *Bucket) GetReader(path string) (rc io.ReadCloser, err error) {
+// GetRequest retrieves an object from an S3 bucket.
+func (b *Bucket) GetResponse(path string) (http.Response, err error) {
 	req := &request{
 		bucket: b.Name,
 		path:   path,
@@ -146,6 +144,17 @@ func (b *Bucket) GetReader(path string) (rc io.ReadCloser, err error) {
 	if err != nil {
 		return nil, err
 	}
+	return resp, nil
+}
+
+// GetReader retrieves an object from an S3 bucket.
+// It is the caller's responsibility to call Close on rc when
+// finished reading.
+func (b *Bucket) GetReader(path string) (rc io.ReadCloser, err error) {
+  resp, err := b.GetResponse(path)
+  if err != nil {
+    return nil, err
+  }
 	return resp.Body, nil
 }
 
