@@ -131,12 +131,12 @@ func (b *Bucket) Get(path string) (data []byte, err error) {
 }
 
 // GetRequest retrieves an object from an S3 bucket.
-func (b *Bucket) GetResponse(path string) (http.Response, err error) {
+func (b *Bucket) GetResponse(path string) (*http.Response, error) {
 	req := &request{
 		bucket: b.Name,
 		path:   path,
 	}
-	err = b.S3.prepare(req)
+	err := b.S3.prepare(req)
 	if err != nil {
 		return nil, err
 	}
